@@ -64,7 +64,7 @@
         "evCharger": { "type": "Property", "value": { "chargerStatus": "available" } },
         "location": {
             "type": "GeoProperty",
-            "value": { "type": "Point", "coordinates": [69.5355, 52.5298] }
+            "value": { "type": "Point", "coordinates": [69.5355, 52.5298, -2.9054] }
         }
     },
     {
