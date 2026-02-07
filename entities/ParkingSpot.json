@@ -1,0 +1,227 @@
+[
+    {
+        "id": "urn:ngsi-ld:SmartIndoorParkingSpot:Spot01",
+        "type": "SmartIndoorParkingSpot",
+        "refParkingGarage": {
+            "type": "Relationship",
+            "object": "urn:ngsi-ld:ParkingGarage:KlinikumGarage01"
+        },
+        "spotNumber": { "type": "Property", "value": "1" },
+        "floorLevel": { "type": "Property", "value": "G" },
+        "status": { "type": "Property", "value": "free" },
+        "occupancyModified": {
+            "type": "Property",
+            "value": { "@type": "DateTime", "@value": "2023-10-27T08:00:00Z" }
+        },
+        "category": { "type": "Property", "value": ["forDisabled", "forElectricCharging"] },
+        "width": { "type": "Property", "value": 3.5 },
+        "length": { "type": "Property", "value": 5.0 },
+        "evCharger": { "type": "Property", "value": { "chargerStatus": "available" } },
+        "location": {
+            "type": "GeoProperty",
+            "value": { "type": "Point", "coordinates": [69.8124, 56.2120] }
+        }
+    },
+    {
+        "id": "urn:ngsi-ld:SmartIndoorParkingSpot:Spot02",
+        "type": "SmartIndoorParkingSpot",
+        "refParkingGarage": {
+            "type": "Relationship",
+            "object": "urn:ngsi-ld:ParkingGarage:KlinikumGarage01"
+        },
+        "spotNumber": { "type": "Property", "value": "2" },
+        "floorLevel": { "type": "Property", "value": "G" },
+        "status": { "type": "Property", "value": "free" },
+        "occupancyModified": {
+            "type": "Property",
+            "value": { "@type": "DateTime", "@value": "2023-10-27T08:00:00Z" }
+        },
+        "category": { "type": "Property", "value": ["forDisabled"] },
+        "width": { "type": "Property", "value": 3.5 },
+        "length": { "type": "Property", "value": 5.0 },
+        "location": {
+            "type": "GeoProperty",
+            "value": { "type": "Point", "coordinates": [76.5557, 55.8214] }
+        }
+    },
+    {
+        "id": "urn:ngsi-ld:SmartIndoorParkingSpot:Spot03",
+        "type": "SmartIndoorParkingSpot",
+        "refParkingGarage": {
+            "type": "Relationship",
+            "object": "urn:ngsi-ld:ParkingGarage:KlinikumGarage01"
+        },
+        "spotNumber": { "type": "Property", "value": "3" },
+        "floorLevel": { "type": "Property", "value": "G" },
+        "status": { "type": "Property", "value": "free" },
+        "occupancyModified": {
+            "type": "Property",
+            "value": { "@type": "DateTime", "@value": "2023-10-27T08:00:00Z" }
+        },
+        "category": { "type": "Property", "value": ["forWomen", "forElectricCharging"] },
+        "width": { "type": "Property", "value": 2.5 },
+        "length": { "type": "Property", "value": 5.0 },
+        "evCharger": { "type": "Property", "value": { "chargerStatus": "available" } },
+        "location": {
+            "type": "GeoProperty",
+            "value": { "type": "Point", "coordinates": [69.5355, 52.5298] }
+        }
+    },
+    {
+        "id": "urn:ngsi-ld:SmartIndoorParkingSpot:Spot04",
+        "type": "SmartIndoorParkingSpot",
+        "refParkingGarage": {
+            "type": "Relationship",
+            "object": "urn:ngsi-ld:ParkingGarage:KlinikumGarage01"
+        },
+        "spotNumber": { "type": "Property", "value": "4" },
+        "floorLevel": { "type": "Property", "value": "G" },
+        "status": { "type": "Property", "value": "free" },
+        "occupancyModified": {
+            "type": "Property",
+            "value": { "@type": "DateTime", "@value": "2023-10-27T08:00:00Z" }
+        },
+        "category": { "type": "Property", "value": ["forWomen", "forElectricCharging"] },
+        "width": { "type": "Property", "value": 2.5 },
+        "length": { "type": "Property", "value": 5.0 },
+        "evCharger": { "type": "Property", "value": { "chargerStatus": "available" } },
+        "location": {
+            "type": "GeoProperty",
+            "value": { "type": "Point", "coordinates": [76.8895, 52.6976] }
+        }
+    },
+    {
+        "id": "urn:ngsi-ld:SmartIndoorParkingSpot:Spot05",
+        "type": "SmartIndoorParkingSpot",
+        "refParkingGarage": {
+            "type": "Relationship",
+            "object": "urn:ngsi-ld:ParkingGarage:KlinikumGarage01"
+        },
+        "spotNumber": { "type": "Property", "value": "5" },
+        "floorLevel": { "type": "Property", "value": "G" },
+        "status": { "type": "Property", "value": "free" },
+        "occupancyModified": {
+            "type": "Property",
+            "value": { "@type": "DateTime", "@value": "2023-10-27T08:00:00Z" }
+        },
+        "category": { "type": "Property", "value": ["forWomen"] },
+        "width": { "type": "Property", "value": 2.5 },
+        "length": { "type": "Property", "value": 5.0 },
+        "location": {
+            "type": "GeoProperty",
+            "value": { "type": "Point", "coordinates": [69.0713, 48.7766] }
+        }
+    },
+    {
+        "id": "urn:ngsi-ld:SmartIndoorParkingSpot:Spot06",
+        "type": "SmartIndoorParkingSpot",
+        "refParkingGarage": {
+            "type": "Relationship",
+            "object": "urn:ngsi-ld:ParkingGarage:KlinikumGarage01"
+        },
+        "spotNumber": { "type": "Property", "value": "6" },
+        "floorLevel": { "type": "Property", "value": "G" },
+        "status": { "type": "Property", "value": "free" },
+        "occupancyModified": {
+            "type": "Property",
+            "value": { "@type": "DateTime", "@value": "2023-10-27T08:00:00Z" }
+        },
+        "category": { "type": "Property", "value": ["forWomen"] },
+        "width": { "type": "Property", "value": 2.5 },
+        "length": { "type": "Property", "value": 5.0 },
+        "location": {
+            "type": "GeoProperty",
+            "value": { "type": "Point", "coordinates": [76.7348, 48.7303] }
+        }
+    },
+    {
+        "id": "urn:ngsi-ld:SmartIndoorParkingSpot:Spot07",
+        "type": "SmartIndoorParkingSpot",
+        "refParkingGarage": {
+            "type": "Relationship",
+            "object": "urn:ngsi-ld:ParkingGarage:KlinikumGarage01"
+        },
+        "spotNumber": { "type": "Property", "value": "7" },
+        "floorLevel": { "type": "Property", "value": "G" },
+        "status": { "type": "Property", "value": "free" },
+        "occupancyModified": {
+            "type": "Property",
+            "value": { "@type": "DateTime", "@value": "2023-10-27T08:00:00Z" }
+        },
+        "category": { "type": "Property", "value": ["general", "forElectricCharging"] },
+        "width": { "type": "Property", "value": 2.5 },
+        "length": { "type": "Property", "value": 5.0 },
+        "evCharger": { "type": "Property", "value": { "chargerStatus": "available" } },
+        "location": {
+            "type": "GeoProperty",
+            "value": { "type": "Point", "coordinates": [69.6403, 45.1934] }
+        }
+    },
+    {
+        "id": "urn:ngsi-ld:SmartIndoorParkingSpot:Spot08",
+        "type": "SmartIndoorParkingSpot",
+        "refParkingGarage": {
+            "type": "Relationship",
+            "object": "urn:ngsi-ld:ParkingGarage:KlinikumGarage01"
+        },
+        "spotNumber": { "type": "Property", "value": "8" },
+        "floorLevel": { "type": "Property", "value": "G" },
+        "status": { "type": "Property", "value": "free" },
+        "occupancyModified": {
+            "type": "Property",
+            "value": { "@type": "DateTime", "@value": "2023-10-27T08:00:00Z" }
+        },
+        "category": { "type": "Property", "value": ["general", "forElectricCharging"] },
+        "width": { "type": "Property", "value": 2.5 },
+        "length": { "type": "Property", "value": 5.0 },
+        "evCharger": { "type": "Property", "value": { "chargerStatus": "available" } },
+        "location": {
+            "type": "GeoProperty",
+            "value": { "type": "Point", "coordinates": [76.8160, 45.0976] }
+        }
+    },
+    {
+        "id": "urn:ngsi-ld:SmartIndoorParkingSpot:Spot09",
+        "type": "SmartIndoorParkingSpot",
+        "refParkingGarage": {
+            "type": "Relationship",
+            "object": "urn:ngsi-ld:ParkingGarage:KlinikumGarage01"
+        },
+        "spotNumber": { "type": "Property", "value": "9" },
+        "floorLevel": { "type": "Property", "value": "G" },
+        "status": { "type": "Property", "value": "free" },
+        "occupancyModified": {
+            "type": "Property",
+            "value": { "@type": "DateTime", "@value": "2023-10-27T08:00:00Z" }
+        },
+        "category": { "type": "Property", "value": ["general"] },
+        "width": { "type": "Property", "value": 2.5 },
+        "length": { "type": "Property", "value": 5.0 },
+        "location": {
+            "type": "GeoProperty",
+            "value": { "type": "Point", "coordinates": [69.4512, 41.3414] }
+        }
+    },
+    {
+        "id": "urn:ngsi-ld:SmartIndoorParkingSpot:Spot10",
+        "type": "SmartIndoorParkingSpot",
+        "refParkingGarage": {
+            "type": "Relationship",
+            "object": "urn:ngsi-ld:ParkingGarage:KlinikumGarage01"
+        },
+        "spotNumber": { "type": "Property", "value": "10" },
+        "floorLevel": { "type": "Property", "value": "G" },
+        "status": { "type": "Property", "value": "free" },
+        "occupancyModified": {
+            "type": "Property",
+            "value": { "@type": "DateTime", "@value": "2023-10-27T08:00:00Z" }
+        },
+        "category": { "type": "Property", "value": ["general"] },
+        "width": { "type": "Property", "value": 2.5 },
+        "length": { "type": "Property", "value": 5.0 },
+        "location": {
+            "type": "GeoProperty",
+            "value": { "type": "Point", "coordinates": [76.8137, 41.1137] }
+        }
+    }
+]

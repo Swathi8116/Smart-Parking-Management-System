@@ -1,0 +1,31 @@
+services:
+  orion:
+    image: fiware/orion-ld:latest
+    hostname: orion
+    container_name: fiware-orion1
+    depends_on:
+      - mongo
+    networks:
+      - default
+    ports:
+      - "1026:1026"
+    command: -dbhost mongo -logLevel DEBUG
+    healthcheck:
+      test: curl --fail -s http://localhost:1026/version || exit 1
+      interval: 5s
+
+  mongo:
+    image: mongo:4.2
+    hostname: mongo
+    container_name: mongo-db
+    expose:
+      - "27017"
+    ports:
+      - "27017:27017"
+    networks:
+      - default
+    volumes:
+      - mongo-data1:/data/db
+
+volumes:
+  mongo-data1:

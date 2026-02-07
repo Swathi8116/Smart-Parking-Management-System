@@ -1,0 +1,53 @@
+{
+    "id": "urn:ngsi-ld:ParkingGarage:KlinikumGarage01",
+    "type": "ParkingGarage",
+    "name": {
+        "type": "Property",
+        "value": "Klinikum Dortmund Garage"
+    },
+    "location": {
+        "type": "GeoProperty",
+        "value": {
+            "type": "Point",
+            "coordinates": [7.4653, 51.5136]
+        }
+    },
+    "address": {
+        "type": "Property",
+        "value": {
+            "streetAddress": "Sonnenstraße 14",
+            "addressLocality": "Dortmund",
+            "addressCountry": "DE"
+        }
+    },
+    "totalSpotCapacity": {
+        "type": "Property",
+        "value": 10
+    },
+    "availableSpotCount": {
+        "type": "Property",
+        "value": 10
+    },
+    "occupancy": {
+        "type": "Property",
+        "value": 0
+    },
+    "openingHours": {
+        "type": "Property",
+        "value": "24/7"
+    },
+    "features": {
+        "type": "Property",
+        "value": [
+            "EVCharging",
+            "AccessibleParking"
+        ]
+    },
+    "occupancyModified": {
+        "type": "Property",
+        "value": {
+            "@type": "DateTime",
+            "@value": "2023-10-27T08:00:00Z"
+        }
+    }
+}
