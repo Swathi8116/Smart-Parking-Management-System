@@ -19,7 +19,7 @@
         "evCharger": { "type": "Property", "value": { "chargerStatus": "available" } },
         "location": {
             "type": "GeoProperty",
-            "value": { "type": "Point", "coordinates": [69.8124, 56.2120] }
+            "value": { "type": "Point", "coordinates": [69.8124, 56.2120, -2.9004] }
         }
     },
     {
@@ -41,7 +41,7 @@
         "length": { "type": "Property", "value": 5.0 },
         "location": {
             "type": "GeoProperty",
-            "value": { "type": "Point", "coordinates": [76.5557, 55.8214] }
+            "value": { "type": "Point", "coordinates": [76.5557, 55.8214, -0.1826] }
         }
     },
     {
@@ -87,7 +87,7 @@
         "evCharger": { "type": "Property", "value": { "chargerStatus": "available" } },
         "location": {
             "type": "GeoProperty",
-            "value": { "type": "Point", "coordinates": [76.8895, 52.6976] }
+            "value": { "type": "Point", "coordinates": [76.8895, 52.6976, -0.1771] }
         }
     },
     {
@@ -109,7 +109,7 @@
         "length": { "type": "Property", "value": 5.0 },
         "location": {
             "type": "GeoProperty",
-            "value": { "type": "Point", "coordinates": [69.0713, 48.7766] }
+            "value": { "type": "Point", "coordinates": [69.0713, 48.7766, -2.9431] }
         }
     },
     {
@@ -131,7 +131,7 @@
         "length": { "type": "Property", "value": 5.0 },
         "location": {
             "type": "GeoProperty",
-            "value": { "type": "Point", "coordinates": [76.7348, 48.7303] }
+            "value": { "type": "Point", "coordinates": [76.7348, 48.7303, -0.1950] }
         }
     },
     {
@@ -154,7 +154,7 @@
         "evCharger": { "type": "Property", "value": { "chargerStatus": "available" } },
         "location": {
             "type": "GeoProperty",
-            "value": { "type": "Point", "coordinates": [69.6403, 45.1934] }
+            "value": { "type": "Point", "coordinates": [69.6403, 45.1934, -2.8840] }
         }
     },
     {
@@ -177,7 +177,7 @@
         "evCharger": { "type": "Property", "value": { "chargerStatus": "available" } },
         "location": {
             "type": "GeoProperty",
-            "value": { "type": "Point", "coordinates": [76.8160, 45.0976] }
+            "value": { "type": "Point", "coordinates": [76.8160, 45.0976, -0.1679] }
         }
     },
     {
@@ -199,7 +199,7 @@
         "length": { "type": "Property", "value": 5.0 },
         "location": {
             "type": "GeoProperty",
-            "value": { "type": "Point", "coordinates": [69.4512, 41.3414] }
+            "value": { "type": "Point", "coordinates": [69.4512, 41.3414, -2.9248] }
         }
     },
     {
@@ -221,7 +221,7 @@
         "length": { "type": "Property", "value": 5.0 },
         "location": {
             "type": "GeoProperty",
-            "value": { "type": "Point", "coordinates": [76.8137, 41.1137] }
+            "value": { "type": "Point", "coordinates": [76.8137, 41.1137, -0.1858] }
         }
     }
 ]
