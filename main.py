@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Body, WebSocket
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from starlette.responses import FileResponse
 from pydantic import BaseModel
@@ -8,6 +9,18 @@ import json
 
 
 app = FastAPI(title="Smart Parking Mission Control")
+
+# Allows index.html to call this API whether it's opened as a local file,
+# served from a different port, or hosted elsewhere. Read/write behavior
+# of every endpoint below is unchanged — this only affects which origins
+# the browser permits to make the request.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 ORION_URL = "http://127.0.0.1:1026/ngsi-ld/v1/entities"
 
@@ -20,10 +33,10 @@ def get_clean_value(attribute):
     """Helper function to extract the actual value from NGSI-LD format"""
     if not attribute:
         return None
-    
+
     if isinstance(attribute, dict) and 'value' in attribute:
         return attribute['value']
-    
+
     return attribute
 
 class ConnectionManager:
@@ -72,7 +85,7 @@ def find_parking_spot(preferences: BookingRequest):
     """
     Finds the best parking spot based on user preferences.
     """
-    
+
     try:
         response = requests.get(
             f"{ORION_URL}?type=SmartIndoorParkingSpot",
@@ -85,63 +98,63 @@ def find_parking_spot(preferences: BookingRequest):
 
 
     suitable_spots = []
-    
+
     for spot in all_spots:
-        
+
         spot_id = spot.get("id")
-        
+
         status = get_clean_value(spot.get("status"))
-        categories = get_clean_value(spot.get("category"))
-        
+        categories = get_clean_value(spot.get("category")) or []
+        # Orion can return category as a single string OR a list — normalize it
+        if not isinstance(categories, list):
+            categories = [categories]
+
         if status != "free":
             continue
 
-        spot_weight = 0
-        is_match = True
-        
-        if "forElectricCharging" in categories:
-            spot_weight += 1
+        has_ev = "forElectricCharging" in categories
+        has_disabled = "forDisabled" in categories
+        has_women = "forWomen" in categories
 
-        if "forDisabled" in categories:
-            spot_weight += 1
+        spot_weight = int(has_ev) + int(has_disabled) + int(has_women)
 
-        if "forWomen" in categories:
-            spot_weight += 1
-
-        if preferences.requires_ev:
-            if "forElectricCharging" not in categories:
-                is_match = False
-        
-        if preferences.requires_disabled:
-            if "forDisabled" not in categories:
-                is_match = False
-        
-        if preferences.requires_female:
-            if "forWomen" not in categories:
-                is_match = False
-           
-       
-        if not preferences.requires_disabled and not preferences.requires_female:
-            if "forDisabled" in categories or "forWomen" in categories:
-                is_match = False
+        # A spot matches only if EACH special category either:
+        #   - was requested and the spot has it, or
+        #   - was NOT requested and the spot does NOT have it.
+        # This is what makes the three categories behave symmetrically:
+        # requesting "general" (nothing) should never match an EV spot,
+        # a women's spot, or an accessible spot — and requesting "women only"
+        # should never match a women's spot that's ALSO an EV spot.
+        is_match = (
+            (has_ev == preferences.requires_ev) and
+            (has_disabled == preferences.requires_disabled) and
+            (has_women == preferences.requires_female)
+        )
 
         if is_match:
             suitable_spots.append((spot, spot_weight))
 
-    
+
     if not suitable_spots:
         return {"status": "failure", "message": "No suitable spots available."}
-    
-    
+
+
     best_spot = None
     min_weight = float("inf")
+    min_spot_number = float("inf")
 
     for spot, weight in suitable_spots:
-        if weight < min_weight:
+        raw_spot_number = get_clean_value(spot.get("spotNumber"))
+        try:
+            spot_number = int(raw_spot_number)
+        except (TypeError, ValueError):
+            spot_number = float("inf")
+        if weight < min_weight or (weight == min_weight and spot_number < min_spot_number):
             min_weight = weight
+            min_spot_number = spot_number
             best_spot = spot
-   
-    
+
+
     location_data = get_clean_value(best_spot.get("location"))
     coordinates = location_data.get("coordinates") if location_data else [0,0]
 
@@ -152,7 +165,45 @@ def find_parking_spot(preferences: BookingRequest):
         "coordinates": coordinates,
         "message": "Spot reserved successfully."
     }
-    
+
+@app.get("/all-spots")
+def get_all_spots():
+    """
+    Read-only endpoint added purely to power the new dashboard grid.
+    Does NOT modify any Digital Twin state — just reflects it.
+    Returns spot number, status, and category for every SmartIndoorParkingSpot.
+    """
+    try:
+        response = requests.get(
+            f"{ORION_URL}?type=SmartIndoorParkingSpot",
+            headers={"Accept": "application/ld+json"}
+        )
+        response.raise_for_status()
+        all_spots = response.json()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Could not connect to FIWARE: {str(e)}")
+
+    spots_summary = []
+    for spot in all_spots:
+        spots_summary.append({
+            "id": spot.get("id"),
+            "spotNumber": get_clean_value(spot.get("spotNumber")),
+            "status": get_clean_value(spot.get("status")) or "unknown",
+            "category": get_clean_value(spot.get("category")) or []
+        })
+
+    def _sort_key(s):
+        raw = s.get("spotNumber")
+        try:
+            return (0, int(raw))
+        except (TypeError, ValueError):
+            return (1, 0)
+
+    spots_summary.sort(key=_sort_key)
+
+    return {"status": "success", "spots": spots_summary}
+
+
 class BookingConfirmation(BaseModel):
     spot_id: str
 
@@ -162,7 +213,7 @@ async def book_parking_spot(booking: BookingConfirmation):
     Updates the Digital Twin status to 'occupied' so no one else can take it.
     """
     spot_id = booking.spot_id
-    
+
     try:
         response = requests.get(
             f"{ORION_URL}/{spot_id}",
@@ -173,14 +224,20 @@ async def book_parking_spot(booking: BookingConfirmation):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Could not connect to FIWARE: {str(e)}")
 
-    coords = response['location']['value']['coordinates']
+    try:
+        coords = response['location']['value']['coordinates']
+    except (KeyError, TypeError) as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Spot {spot_id} is missing expected location data in FIWARE: {str(e)}"
+        )
 
     update_payload = {
         "status": {
             "type": "Property",
             "value": "occupied"
         },
-        
+
         "occupancyModified": {
             "type": "Property",
             "value": {
@@ -189,26 +246,32 @@ async def book_parking_spot(booking: BookingConfirmation):
             }
         }
     }
-    
+
     url = f"http://localhost:1026/ngsi-ld/v1/entities/{spot_id}/attrs"
-    
+
     try:
         response = requests.patch(
             url,
             json=update_payload,
             headers={
                 "Content-Type": "application/json",
-                
+
             }
         )
         response.raise_for_status() 
-        
+
     except requests.exceptions.HTTPError as e:
         raise HTTPException(status_code=400, detail=f"Failed to update FIWARE: {response.text}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Connection Error: {str(e)}")
 
-    await manager.send_coordinates(spot_id, coords)
+    try:
+        await manager.send_coordinates(spot_id, coords)
+    except Exception as e:
+        # The booking itself already succeeded above — a broadcast failure
+        # (e.g. a stale/disconnected machine socket) shouldn't undo that
+        # or report the booking as failed to the user.
+        print(f"Warning: could not broadcast coordinates for {spot_id}: {e}")
 
     return {
         "status": "success", 
@@ -247,7 +310,7 @@ def clear_parking_spot():
     """
     Finds the best parking spot based on user preferences.
     """
-    
+
     try:
         response = requests.get(
             f"{ORION_URL}?type=SmartIndoorParkingSpot",
@@ -258,21 +321,21 @@ def clear_parking_spot():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Could not connect to FIWARE: {str(e)}")
 
-    
+
     for spot in all_spots:
-        
+
         spot_id = spot.get("id")
-        
+
         status = get_clean_value(spot.get("status"))
         categories = get_clean_value(spot.get("category"))
-        
+
         if status != "free":
             update_payload = {
                     "status": {
                         "type": "Property",
                         "value": "free"
                     },
-                    
+
                     "occupancyModified": {
                         "type": "Property",
                         "value": {
@@ -282,20 +345,20 @@ def clear_parking_spot():
                     }
                 }
 
-    
+
             url = f"http://localhost:1026/ngsi-ld/v1/entities/{spot_id}/attrs"
-    
+
             try:
                 response = requests.patch(
                     url,
                     json=update_payload,
                     headers={
                         "Content-Type": "application/json",
-                        
+
                     }
                 )
                 response.raise_for_status() 
-                
+
             except requests.exceptions.HTTPError as e:
                 raise HTTPException(status_code=400, detail=f"Failed to update FIWARE: {response.text}")
             except Exception as e:
@@ -311,7 +374,7 @@ def clear_single_parking_spot(spot_id: str):
     """
     Resets a specific parking spot status to 'free' in the Digital Twin.
     """
-    
+
     update_payload = {
         "status": {
             "type": "Property",
@@ -327,7 +390,7 @@ def clear_single_parking_spot(spot_id: str):
     }
 
     url = f"http://localhost:1026/ngsi-ld/v1/entities/{spot_id}/attrs"
-    
+
     try:
         response = requests.patch(
             url,
@@ -339,9 +402,9 @@ def clear_single_parking_spot(spot_id: str):
         # Check if the spot actually exists before trying to update
         if response.status_code == 404:
             raise HTTPException(status_code=404, detail=f"Spot {spot_id} not found in FIWARE.")
-            
+
         response.raise_for_status() 
-        
+
     except requests.exceptions.HTTPError as e:
         raise HTTPException(status_code=400, detail=f"Failed to update FIWARE: {response.text}")
     except Exception as e:
